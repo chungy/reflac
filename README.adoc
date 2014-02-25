@@ -1,5 +1,5 @@
-reflac.sh
-=========
+reflac
+======
 
 This is a small shell script that can recompress FLAC files while
 preserving all the tagging information. It is safe to use on files

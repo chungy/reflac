@@ -3,7 +3,26 @@ reflac
 
 This is a small shell script that can recompress FLAC files while
 preserving all the tagging information. It is safe to use on files
-with special characters (spaces, $s, etc) in them. Presently, it takes
-no options, it recompresses FLAC files with -8, the highest
-compression available. Just run it in a directory full of FLACs you
-want recompressed.
+with special characters in their names.
+
+Usage
+-----
+
+Running it is simple: `reflac [OPTION]... [--] DIRECTORY...`
+
+One or more directories must be specified (okay, technically you can
+have none, but the program exits immediately!), the double-hyphen
+being supported so that you can terminate the options list and enter
+directory names that begin with a hypen.
+
+There are only a few options for it, mainly:
+
+--verbose, -v::
+Used once, it displays the file names as they are being
+processed. Used twice, the full standard output of the `flac` command
+is displayed.
+
+-0, -1, -2, -3, -4, -5, -6, -7, -8, --fast, --best::
+Selects the compression level for `flac`, the default being +-5+. Like
+the `flac` command itself, +--fast+ and +--best+ are synonyms for +-0+
+and +-8+ respectively.

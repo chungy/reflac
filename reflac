@@ -1,9 +1,92 @@
-#!/bin/sh -
+#!/bin/sh
 
-for flac in *.flac; do
-    metaflac --no-utf8-convert --export-tags-to="$(basename "$flac" flac)tag" "$flac"
-    flac --delete-input-file -d "$flac"
-    flac --delete-input-file -8 "$(basename "$flac" flac)wav"
-    metaflac --no-utf8-convert --import-tags-from="$(basename "$flac" flac)tag" "$flac"
-    rm -f "$(basename "$flac" flac)tag"
+# Defaults
+VERBOSE=0
+FLAC_LEVEL=5 # the default FLAC compression
+
+CWD=$(pwd)
+OPTS=$(getopt -o vh012345678 -l verbose,help,fast,best -n reflac -- "$@")
+
+if [ $? != 0 ]; then echo "getopt failure"; exit 1; fi
+
+eval set -- "$OPTS"
+
+usage()
+{
+    cat <<EOF
+\`reflac' recompresses FLAC files while maintaining tags and file names.
+
+Usage: reflac [OPTION]... [--] DIRECTORY...
+
+ -h --help     Displays this help text
+ -v --verbose  Increases the verbosity. Use once to display the FLACs
+               currently being processed, use twice for the full \`flac'
+               output.
+ -0 --fast     Use the fastest, but worst, compression possible.
+ -1..-7        Adjust FLAC compresion between these standard ranges.
+               The default is -5, the same as for flac itself.
+ -8 --best     Use the slowest, but best, compression possible.
+
+DIRECTORY should point \`reflac' to somewhere that contains *.flac
+files. Optionally terminate the argument list with -- so that any
+possible directory names don't get misinterpreted as arguments.
+EOF
+
+    exit 0
+}
+
+# This is basically all the special sauce.
+recompress()
+{
+    for flac in *.flac; do
+        if [ $VERBOSE -eq 1 ]; then
+            echo "  $flac"
+        fi
+
+        metaflac --no-utf8-convert \
+            --export-tags-to="$(basename "$flac" flac)tag" "$flac"
+
+        if [ $VERBOSE -gt 1 ]; then
+            flac --delete-input-file -d "$flac"
+            flac --delete-input-file -$FLAC_LEVEL \
+                "$(basename "$flac" flac)wav"
+        else
+            flac -s --delete-input-file -d "$flac"
+            flac -s --delete-input-file -$FLAC_LEVEL \
+                "$(basename "$flac" flac)wav"
+        fi
+
+        metaflac --no-utf8-convert \
+            --import-tags-from="$(basename "$flac" flac)tag" "$flac"
+        rm -f "$(basename "$flac" flac)tag"
+    done
+}
+
+while true ; do
+    case "$1" in
+        -v|--verbose)
+            VERBOSE=$((VERBOSE+1))
+            shift ;;
+        -0|-1|-2|-3|-4|-5|-6|-7|-8)
+            FLAC_LEVEL=${1#-}
+            shift ;;
+        --fast)
+            FLAC_LEVEL=0
+            shift ;;
+        --best)
+            FLAC_LEVEL=8
+            shift ;;
+        -h|--help)
+            usage
+            shift ;;
+        --) shift; break ;;
+        *) echo "This should never happen!" >&2; exit 1 ;;
+    esac
+done
+
+for dir do
+    cd "$dir" || exit 1
+    if [ $VERBOSE -gt 0 ]; then echo "Entering $dir"; fi
+    recompress
+    cd "$CWD"
 done

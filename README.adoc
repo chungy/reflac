@@ -1,0 +1,9 @@
+reflac.sh
+=========
+
+This is a small shell script that can recompress FLAC files while
+preserving all the tagging information. It is safe to use on files
+with special characters (spaces, $s, etc) in them. Presently, it takes
+no options, it recompresses FLAC files with -8, the highest
+compression available. Just run it in a directory full of FLACs you
+want recompressed.

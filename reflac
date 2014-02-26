@@ -1,8 +1,7 @@
 #!/bin/sh
 
-# Defaults
 VERBOSE=0
-FLAC_LEVEL=5 # the default FLAC compression
+FLAC_LEVEL=5 # Default FLAC compression level
 
 CWD=$(pwd)
 OPTS=$(getopt -o vh012345678 -l verbose,help,fast,best -n reflac -- "$@")

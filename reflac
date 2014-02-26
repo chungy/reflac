@@ -1,10 +1,13 @@
 #!/bin/sh
 
+VERSION=0.1
+
 VERBOSE=0
 FLAC_LEVEL=5 # Default FLAC compression level
 
 CWD=$(pwd)
-OPTS=$(getopt -o vh012345678 -l verbose,help,fast,best -n reflac -- "$@")
+OPTS=$(getopt -o Vvh012345678 -l verbose,help,version,fast,best -n reflac \
+    -- "$@")
 
 if [ $? != 0 ]; then echo "getopt failure"; exit 1; fi
 
@@ -18,6 +21,7 @@ usage()
 Usage: reflac [OPTION]... [--] DIRECTORY...
 
  -h --help     Displays this help text
+ -V --version  Displays the version of this program
  -v --verbose  Increases the verbosity. Use once to display the FLACs
                currently being processed, use twice for the full \`flac'
                output.
@@ -78,6 +82,9 @@ while true ; do
         -h|--help)
             usage
             shift ;;
+	-V|--version)
+	    echo "reflac version $VERSION"
+	    exit 0 ;;
         --) shift; break ;;
         *) echo "This should never happen!" >&2; exit 1 ;;
     esac

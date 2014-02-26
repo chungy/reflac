@@ -23,6 +23,9 @@ arguments as directory names.
 *-h*, *--help*::
 Displays a usage summary and brief help descriptions.
 
+*-V*, *--version*::
+Displays reflac's version.
+
 *-v*, *--verbose*::
 reflac will keep quiet in normal operation, keeping to the Rule of
 Silence. Specifying this option once will display the directory names

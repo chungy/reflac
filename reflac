@@ -44,21 +44,21 @@ recompress()
         fi
 
         metaflac --no-utf8-convert \
-            --export-tags-to="$(basename "$flac" flac)tag" "$flac"
+            --export-tags-to="$(basename -s flac -- "$flac")tag" -- "$flac"
 
         if [ $VERBOSE -gt 1 ]; then
-            flac --delete-input-file -d "$flac"
-            flac --delete-input-file -$FLAC_LEVEL \
-                "$(basename "$flac" flac)wav"
+            flac --delete-input-file -d -- "$flac"
+            flac --delete-input-file -$FLAC_LEVEL -- \
+                "$(basename -s flac -- "$flac")wav"
         else
-            flac -s --delete-input-file -d "$flac"
-            flac -s --delete-input-file -$FLAC_LEVEL \
-                "$(basename "$flac" flac)wav"
+            flac -s --delete-input-file -d -- "$flac"
+            flac -s --delete-input-file -$FLAC_LEVEL -- \
+                "$(basename -s flac -- "$flac")wav"
         fi
 
         metaflac --no-utf8-convert \
-            --import-tags-from="$(basename "$flac" flac)tag" "$flac"
-        rm -f "$(basename "$flac" flac)tag"
+            --import-tags-from="$(basename -s flac -- "$flac")tag" -- "$flac"
+        rm -f -- "$(basename -s flac -- "$flac")tag"
     done
 }
 
@@ -85,8 +85,8 @@ while true ; do
 done
 
 for dir do
-    cd "$dir" || exit 1
-    if [ $VERBOSE -gt 0 ]; then echo "Entering $dir"; fi
+    cd -- "$dir" || exit 1
+    if [ $VERBOSE -gt 0 ]; then echo "$dir"; fi
     recompress
     cd "$CWD"
 done

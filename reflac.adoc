@@ -1,0 +1,54 @@
+reflac(1)
+=========
+:doctype: manpage
+
+
+NAME
+----
+reflac - recompress FLAC files
+
+SYNOPSIS
+--------
+*reflac* ['OPTIONS'...] ['--'] 'DIRECTORY'...
+
+DESCRIPTION
+-----------
+reflac recompresses FLAC files while preserving all of their tags. It
+should always be safe to run, it handles cases of special file names
+well, allowing odd characters such as *, ?, |, and so on. To use on a
+directory that itself begins with a hyphen, you should use the '--'
+argument, it will terminate the options list and intepret all further
+arguments as directory names.
+
+*-h*, *--help*::
+Displays a usage summary and brief help descriptions.
+
+*-v*, *--verbose*::
+reflac will keep quiet in normal operation, keeping to the Rule of
+Silence. Specifying this option once will display the directory names
+it enters and each file name processed. Specifying this option twice
+will display the entire output of *flac*, including the progress of
+each individual file.
+
+*-0*, *--fast*::
+
+Passes *-0* onto the *flac* command. This is the least attainable
+compression possible, and it is also the least CPU-intensive for both
+encoding and decoding.
+
+*-1*, *-2*, *-3*, *-4*, *-5*, *-6*, *-7*::
+Passes the selected compression level to FLAC, higher numbers being
+more compressed but also more CPU-intensive on encoding and
+decoding. The default for reflac is *-5*, the same as *flac* itself.
+
+*-8*, *--best*::
+Passes *-8* onto the *flac* command. This is the highest attainable
+compression possible, and it is also the most CPU-intensive for both
+encoding and decoding. Real-time playback may not be possible on some
+embedded-type systems, such as Blu-ray players or portable music
+players.
+
+COPYRIGHT
+---------
+reflac is licensed under a very permissive ISC license, the same
+prefered by OpenBSD. See *COPYING* in the distribution for details.

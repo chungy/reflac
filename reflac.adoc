@@ -33,6 +33,13 @@ it enters and each file name processed. Specifying this option twice
 will display the entire output of *flac*, including the progress of
 each individual file.
 
+*-r*, *--recursive*::
+Descend into directories recursively.  You can easily recompress an
+entire tree of FLACs using this option, if, for example, you might
+store multiple albums or multiple discs in separate directories, you
+can just specify the top-level directory with the recursive option
+enabled.
+
 *-0*, *--fast*::
 
 Passes *-0* onto the *flac* command. This is the least attainable

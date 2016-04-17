@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 
 VERSION=0.2
 
@@ -18,14 +20,14 @@ eval set -- "$OPTS"
 usage()
 {
     cat <<EOF
-\`reflac' recompresses FLAC files while maintaining tags and file names.
+‘reflac’ recompresses FLAC files while maintaining tags and file names.
 
 Usage: reflac [OPTION]... [--] DIRECTORY...
 
  -h --help       Displays this help text
  -V --version    Displays the version of this program
  -v --verbose    Increases the verbosity. Use once to display the FLACs
-                 currently being processed, use twice for the full \`flac'
+                 currently being processed, use twice for the full ‘flac’
                  output.
  -r --recursive  Recurse into directories.
  -0 --fast       Use the fastest, but worst, compression possible.
@@ -33,7 +35,7 @@ Usage: reflac [OPTION]... [--] DIRECTORY...
                  The default is -5, the same as for flac itself.
  -8 --best       Use the slowest, but best, compression possible.
 
-DIRECTORY should point \`reflac' to somewhere that contains *.flac
+DIRECTORY should point ‘reflac’ to somewhere that contains *.flac
 files. Optionally terminate the argument list with -- so that any
 possible directory names don't get misinterpreted as arguments.
 EOF
@@ -41,7 +43,6 @@ EOF
     exit 0
 }
 
-# This is basically all the special sauce.
 recompress()
 {
     for flac in *.flac; do
@@ -100,7 +101,7 @@ for dir do
     if [ $RECURSIVE -eq 1 ]; then
         if [ $VERBOSE -eq 1 ]; then
             find "$dir" -type d -exec "$SELF" -v -"$FLAC_LEVEL" {} \;
-        elif [ $VERBOSE -eq 2 ]; then
+        elif [ $VERBOSE -ge 2 ]; then
             find "$dir" -type d -exec "$SELF" -vv -"$FLAC_LEVEL" {} \;
         else
             find "$dir" -type d -exec "$SELF" -"$FLAC_LEVEL" {} \;
@@ -108,7 +109,7 @@ for dir do
     else
         cd -- "$dir" || exit 1
         if [ $VERBOSE -gt 0 ]; then echo "$dir"; fi
-        if [ ! -z "$(ls *.flac 2>/dev/null)" ]; then
+        if [ ! -z "$(ls -- *.flac 2>/dev/null)" ]; then
             recompress
         fi
         cd "$CWD"

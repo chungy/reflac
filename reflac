@@ -13,8 +13,6 @@ SELF="$(readlink -f "$0")"
 OPTS=$(getopt -o Vvhr012345678 -l verbose,help,recursive,version,fast,best \
               -n reflac -- "$@")
 
-if [ $? != 0 ]; then echo "getopt failure"; exit 1; fi
-
 eval set -- "$OPTS"
 
 usage()
@@ -107,7 +105,7 @@ for dir do
             find "$dir" -type d -exec "$SELF" -"$FLAC_LEVEL" {} \;
         fi
     else
-        cd -- "$dir" || exit 1
+        cd -- "$dir"
         if [ $VERBOSE -gt 0 ]; then echo "$dir"; fi
         if [ ! -z "$(ls -- *.flac 2>/dev/null)" ]; then
             recompress

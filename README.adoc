@@ -1,16 +1,75 @@
 reflac
 ======
 
-This is a small shell script that can recompress FLAC files while
-preserving all the tagging information. It is safe to use on files
-with special characters in their names.
+This is a script that allows you to recompress FLAC files while
+preserving their tags, intended for whole directories and for safety
+regardless of file name characters and encoding.
 
-Usage
------
+When storing FLACs on your big storage (desktop computer, NAS, etc),
+there may be a desire to compress them to the maximum extent possible,
+saving disk space and potentially many gigabytes for large
+collections.  For this, you might use `reflac --best` on them.
 
-Running it is simple: `reflac [OPTION]... [--] DIRECTORY...`
+However, slow and old systems might not have the capability to decode
+a maximally-compressed (or even the standard compression ratio) quick
+enough for real-time playback, and recompressing in a lower setting
+might be beneficial as well.  This script started life, in a _very_
+rudimentary form for this purpose.  The author used Rockbox on an old
+black/white display iPod, and found that `flac -3` was the maximum he
+could compress FLACs while maintaining uninterrupted playback on the
+device.
 
-One or more directories must be specified, the double-hyphen being
-supported so that you can terminate the options list and enter
-directory names that begin with a hypen. See the manual page
-(+reflac.adoc+ in the source) for details.
+Requirements
+------------
+
+Both `flac` and `metaflac` need to be in your $PATH.  These programs
+are normally packaged together as “flac” by distributions.
+
+Running
+-------
+
+....
+Usage: reflac [OPTION]... [--] DIRECTORY...
+
+ -h --help       Displays this help text
+ -V --version    Displays the version of this program
+ -v --verbose    Increases the verbosity.  Use once to display the FLACs
+                 currently being processed, use twice for the full ‘flac’
+                 output.
+ -r --recursive  Recurse into directories.
+ -n --no-action  Do not recompress.  With --verbose, displays a list of
+                 files that would be processed.
+ -0 --fast       Use the fastest, but worst, compression possible.
+ -1..-7          Adjust FLAC compresion between these standard ranges.
+                 The default is -5, the same as for flac itself.
+ -8 --best       Use the slowest, but best, compression possible.
+
+DIRECTORY should point ‘reflac’ to somewhere that contains *.flac
+files. Optionally terminate the argument list with -- so that any
+possible directory names don't get misinterpreted as arguments.
+....
+
+Bugs
+----
+
+What, bugs?  This program is flawless!  Joking aside, although the
+author tries to resolve in `reflac` itself, it is at the mercy of bugs
+and limitations from flac and metaflac.
+
+Tag preservation in the light of malformed tags simply does not exist.
+Certain release groups use buggy software with the creation of their
+files and will trigger some grievances.
+
+You might see something like this:
+....
+$ reflac FLAC
+1-01 The Strange Green Pipe (Medley) [Mikeaudio].tag: ERROR: malformed vorbis comment field "Super Mario 64: Portrait of a Plumber",
+       field contains no '=' character
+....
+
+`reflac` will not continue after the error, resulting in an untagged
+but recompressed FLAC file, with the temporary “.tag” file next to it.
+Manual repair by editing the tag file and metaflac is possible.  The
+author works around the problem by using
+https://picard.musicbrainz.org/[MusicBrainz Picard] to retag the
+files, before using `reflac`.

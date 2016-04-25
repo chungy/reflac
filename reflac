@@ -6,11 +6,13 @@ VERSION=1.0
 
 VERBOSE=0
 RECURSIVE=0
+NOACTION=0
 FLAC_LEVEL=5 # Default FLAC compression level
 
 CWD=$(pwd)
 SELF="$(readlink -f "$0")"
-OPTS=$(getopt -o Vvhr012345678 -l verbose,help,recursive,version,fast,best \
+OPTS=$(getopt -o Vvhrn012345678 \
+              -l version,verbose,help,recursive,no-action,fast,best \
               -n reflac -- "$@")
 
 eval set -- "$OPTS"
@@ -28,6 +30,8 @@ Usage: reflac [OPTION]... [--] DIRECTORY...
                  currently being processed, use twice for the full ‘flac’
                  output.
  -r --recursive  Recurse into directories.
+ -n --no-action  Do not recompress.  With --verbose, displays a list of
+                 files that would be processed.
  -0 --fast       Use the fastest, but worst, compression possible.
  -1..-7          Adjust FLAC compresion between these standard ranges.
                  The default is -5, the same as for flac itself.
@@ -48,22 +52,26 @@ recompress()
             echo "  $flac"
         fi
 
-        metaflac --no-utf8-convert \
-                 --export-tags-to="$(basename -s flac -- "$flac")tag" -- "$flac"
+        if [ $NOACTION -eq 0 ]; then
+            metaflac --no-utf8-convert \
+                     --export-tags-to="$(basename -s flac -- "$flac")tag" \
+                     -- "$flac"
 
-        if [ $VERBOSE -gt 1 ]; then
-            flac --delete-input-file -d -- "$flac"
-            flac --delete-input-file -$FLAC_LEVEL -- \
-                 "$(basename -s flac -- "$flac")wav"
-        else
-            flac -s --delete-input-file -d -- "$flac"
-            flac -s --delete-input-file -$FLAC_LEVEL -- \
-                 "$(basename -s flac -- "$flac")wav"
+            if [ $VERBOSE -gt 1 ]; then
+                flac --delete-input-file -d -- "$flac"
+                flac --delete-input-file -$FLAC_LEVEL -- \
+                     "$(basename -s flac -- "$flac")wav"
+            else
+                flac -s --delete-input-file -d -- "$flac"
+                flac -s --delete-input-file -$FLAC_LEVEL -- \
+                     "$(basename -s flac -- "$flac")wav"
+            fi
+
+            metaflac --no-utf8-convert \
+                     --import-tags-from="$(basename -s flac -- "$flac")tag" \
+                     -- "$flac"
+            rm -f -- "$(basename -s flac -- "$flac")tag"
         fi
-
-        metaflac --no-utf8-convert \
-                 --import-tags-from="$(basename -s flac -- "$flac")tag" -- "$flac"
-        rm -f -- "$(basename -s flac -- "$flac")tag"
     done
 }
 
@@ -84,6 +92,9 @@ while true ; do
         --best)
             FLAC_LEVEL=8
             shift ;;
+        -n|--no-action)
+            NOACTION=1
+            shift ;;
         -V|--version)
             echo "reflac version $VERSION"
             exit 0 ;;
@@ -98,8 +109,14 @@ if [ -z "$@" ]; then
     usage
 fi
 
+if [ $VERBOSE -eq 0 ] && [ $NOACTION -eq 1 ]; then
+    exit 0
+fi
+
 for dir do
-    if [ $RECURSIVE -eq 1 ]; then
+    if [ $RECURSIVE -eq 1 ] && [ $NOACTION -eq 1 ]; then
+        find "$dir" -type d -exec "$SELF" -nv {} \;
+    elif [ $RECURSIVE -eq 1 ]; then
         if [ $VERBOSE -eq 1 ]; then
             find "$dir" -type d -exec "$SELF" -v -"$FLAC_LEVEL" {} \;
         elif [ $VERBOSE -ge 2 ]; then

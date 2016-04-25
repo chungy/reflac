@@ -63,13 +63,18 @@ files and will trigger some grievances.
 You might see something like this:
 ....
 $ reflac FLAC
-1-01 The Strange Green Pipe (Medley) [Mikeaudio].tag: ERROR: malformed vorbis comment field "Super Mario 64: Portrait of a Plumber",
+/tmp/reflac.p8OjPn32z8/1-01 The Strange Green Pipe (Medley) [Mikeaudio].tag: ERROR: malformed vorbis comment field "Super Mario 64: Portrait of a Plumber",
        field contains no '=' character
 ....
 
-`reflac` will not continue after the error, resulting in an untagged
-but recompressed FLAC file, with the temporary “.tag” file next to it.
-Manual repair by editing the tag file and metaflac is possible.  The
-author works around the problem by using
-https://picard.musicbrainz.org/[MusicBrainz Picard] to retag the
-files, before using `reflac`.
+`reflac` will not continue after the error, resulting in the
+untagged-but-recompressed file remaining in the temporary directory,
+the path of which should be part of the error message as in the
+example.  The original file will not have been overwritten,
+maintaining the existing compression as well as the existing tags.
+
+The choice is left to the user for repairing the file manually, such
+as by editing the tag file and using `metaflac` yourself, or removing
+the temporary directory altogether.  The author uses, and recommends,
+https://picard.musicbrainz.org/[MusicBrainz Picard] to retag files
+before using `reflac`.

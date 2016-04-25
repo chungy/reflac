@@ -6,6 +6,8 @@ HEAD
     with hyphens.
   * Displays usage help if no directories are specified on the command
     line.
+  * Use a temporary staging directory, avoiding the possibility of
+    losing all existing tag data in the face of errors.
 
 1.0 (2016-04-17):
 

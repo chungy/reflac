@@ -9,13 +9,16 @@ RECURSIVE=0
 NOACTION=0
 FLAC_LEVEL=5 # Default FLAC compression level
 
-CWD=$(pwd)
+TMPDIR="$(mktemp --tmpdir -d reflac.XXXXXXXXXX)"
+CWD="$(pwd)"
 SELF="$(readlink -f "$0")"
 OPTS=$(getopt -o Vvhrn012345678 \
               -l version,verbose,help,recursive,no-action,fast,best \
               -n reflac -- "$@")
 
 eval set -- "$OPTS"
+
+trap "exit 1" INT
 
 usage()
 {
@@ -54,23 +57,24 @@ recompress()
 
         if [ $NOACTION -eq 0 ]; then
             metaflac --no-utf8-convert \
-                     --export-tags-to="$(basename -s flac -- "$flac")tag" \
+                     --export-tags-to="$TMPDIR/$(basename -s flac -- "$flac")tag" \
                      -- "$flac"
 
             if [ $VERBOSE -gt 1 ]; then
-                flac --delete-input-file -d -- "$flac"
+                flac --output-prefix="$TMPDIR/" -d -- "$flac"
                 flac --delete-input-file -$FLAC_LEVEL -- \
-                     "$(basename -s flac -- "$flac")wav"
+                     "$TMPDIR/$(basename -s flac -- "$flac")wav"
             else
-                flac -s --delete-input-file -d -- "$flac"
+                flac -s --output-prefix="$TMPDIR/" -d -- "$flac"
                 flac -s --delete-input-file -$FLAC_LEVEL -- \
-                     "$(basename -s flac -- "$flac")wav"
+                     "$TMPDIR/$(basename -s flac -- "$flac")wav"
             fi
 
             metaflac --no-utf8-convert \
-                     --import-tags-from="$(basename -s flac -- "$flac")tag" \
-                     -- "$flac"
-            rm -f -- "$(basename -s flac -- "$flac")tag"
+                     --import-tags-from="$TMPDIR/$(basename -s flac -- "$flac")tag" \
+                     -- "$TMPDIR/$flac"
+            mv -f -- "$TMPDIR/$flac" .
+            rm -f -- "$TMPDIR/$(basename -s flac -- "$flac")tag"
         fi
     done
 }
@@ -136,3 +140,5 @@ for dir do
         cd "$CWD"
     fi
 done
+
+rmdir "$TMPDIR"

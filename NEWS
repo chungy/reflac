@@ -1,0 +1,23 @@
+HEAD
+
+  * Add --no-action, enabling the view of files that would be
+    processed.
+  * Secure against using --recursive and directory names beginning
+    with hyphens.
+  * Displays usage help if no directories are specified on the command
+    line.
+
+1.0 (2016-04-17):
+
+  * Use the so-called “bash strict mode” and enabling better
+    processing of special file names.
+
+0.2 (2015-05-18):
+
+  * Added a recursive option, allowing a whole tree to be
+    recompressed.
+
+0.1 (2014-02-26):
+
+  * Initial release, expanded from a ~7 line script the author
+    initially wrote around 2003.

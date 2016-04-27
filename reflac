@@ -44,7 +44,7 @@ DIRECTORY should point ‘reflac’ to somewhere that contains *.flac
 files. Optionally terminate the argument list with -- so that any
 possible directory names don't get misinterpreted as arguments.
 EOF
-
+    rmdir "$TMPDIR"
     exit 0
 }
 
@@ -114,6 +114,7 @@ if [ -z "$*" ]; then
 fi
 
 if [ $VERBOSE -eq 0 ] && [ $NOACTION -eq 1 ]; then
+    rmdir "$TMPDIR"
     exit 0
 fi
 

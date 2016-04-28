@@ -1,4 +1,4 @@
-Repository head:
+1.2 (2016-04-28):
 
   * Sync data by default, add --no-sync switch to disable.  New
     version of FLACs are written out to prevent missing/incomplete

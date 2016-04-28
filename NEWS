@@ -1,3 +1,9 @@
+Repository head:
+
+  * Sync data by default, add --no-sync switch to disable.  New
+    version of FLACs are written out to prevent missing/incomplete
+    files in the face of a crash.
+
 1.1 (2016-04-25):
 
   * Add --no-action, enabling the view of files that would be

@@ -7,13 +7,14 @@ VERSION=1.1
 VERBOSE=0
 RECURSIVE=0
 NOACTION=0
+SYNC=1
 FLAC_LEVEL=5 # Default FLAC compression level
 
 TMPDIR="$(mktemp --tmpdir -d reflac.XXXXXXXXXX)"
 CWD="$(pwd)"
 SELF="$(readlink -f "$0")"
-OPTS=$(getopt -o Vvhrn012345678 \
-              -l version,verbose,help,recursive,no-action,fast,best \
+OPTS=$(getopt -o Vvhrns012345678 \
+              -l version,verbose,help,recursive,no-action,no-sync,fast,best \
               -n reflac -- "$@")
 
 eval set -- "$OPTS"
@@ -35,6 +36,8 @@ Usage: reflac [OPTION]... [--] DIRECTORY...
  -r --recursive  Recurse into directories.
  -n --no-action  Do not recompress.  With --verbose, displays a list of
                  files that would be processed.
+ -s --no-sync    Do not synchronize file data.  Will return faster, with
+                 the potential danger to lose your files in a system crash.
  -0 --fast       Use the fastest, but worst, compression possible.
  -1..-7          Adjust FLAC compresion between these standard ranges.
                  The default is -5, the same as for flac itself.
@@ -73,7 +76,14 @@ recompress()
             metaflac --no-utf8-convert \
                      --import-tags-from="$TMPDIR/$(basename -s flac -- "$flac")tag" \
                      -- "$TMPDIR/$flac"
-            mv -f -- "$TMPDIR/$flac" .
+            mv -f -- "$TMPDIR/$flac" "$flac.new"
+            if [ $SYNC -eq 1 ]; then
+                sync "$flac.new"
+                mv -f "$flac.new" "$flac"
+                sync "$flac"
+            else
+                mv -f "$flac.new" "$flac"
+            fi
             rm -f -- "$TMPDIR/$(basename -s flac -- "$flac")tag"
         fi
     done
@@ -98,6 +108,9 @@ while true ; do
             shift ;;
         -n|--no-action)
             NOACTION=1
+            shift ;;
+        -s|--no-sync)
+            SYNC=0
             shift ;;
         -V|--version)
             echo "reflac version $VERSION"

@@ -25,6 +25,33 @@ Requirements
 Both `flac` and `metaflac` need to be in your $PATH.  These programs
 are normally packaged together as “flac” by distributions.
 
+The script both depends on Bash and GNU features of other core
+utilities.  Versions of `mv`, `getopt`, `sync`, etc from other sources
+(such as the *BSD operating systems) might work, but require
+compatibility with the same switches found in the GNU versions.
+
+reflac has only been developed on tested on GNU+Linux, but should work
+on any other operating system with the appropriate tools.
+
+Safety
+------
+
+By default, reflac performs a sync on files after two points of its
+process: after moving the recompressed file from the temporary
+directory to the original location, and after renaming the file from
+“*.new” to the original name.  This should provide safety in the case
+of system crashes or processes being killed.
+
+Assuming file system syncs have not been disabled, one of two
+scenarios should arise in the worst case:
+
+  1. No new files appear in the directory.  A complete FLAC file may
+  or may not still be available in a temporary staging directory under
+  /tmp.
+  2. There exists an additional “*.new” file in the directory being
+  processed, which may or may not be a complete FLAC file, the status
+  of which can be tested with `flac -t`.
+
 Running
 -------
 
@@ -39,6 +66,8 @@ Usage: reflac [OPTION]... [--] DIRECTORY...
  -r --recursive  Recurse into directories.
  -n --no-action  Do not recompress.  With --verbose, displays a list of
                  files that would be processed.
+ -s --no-sync    Do not synchronize file data.  Will return faster, with
+                 the potential danger to lose your files in a system crash.
  -0 --fast       Use the fastest, but worst, compression possible.
  -1..-7          Adjust FLAC compresion between these standard ranges.
                  The default is -5, the same as for flac itself.
@@ -53,7 +82,7 @@ Bugs
 ----
 
 What, bugs?  This program is flawless!  Joking aside, although the
-author tries to resolve in `reflac` itself, it is at the mercy of bugs
+author tries to resolve in reflac itself, it is at the mercy of bugs
 and limitations from flac and metaflac.
 
 Tag preservation in the light of malformed tags simply does not exist.
@@ -67,7 +96,7 @@ $ reflac FLAC
        field contains no '=' character
 ....
 
-`reflac` will not continue after the error, resulting in the
+reflac will not continue after the error, resulting in the
 untagged-but-recompressed file remaining in the temporary directory,
 the path of which should be part of the error message as in the
 example.  The original file will not have been overwritten,

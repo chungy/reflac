@@ -44,6 +44,11 @@ enabled.
 Do not recompress any files.  Combined with the *-v* option, reflac
 will display a list of files it would otherwise recompress.
 
+*-s*, *--no-sync*::
+Do not synchronize file data or the rename operation.  The script will
+return to prompt faster, but introduces a chance to lose files or have
+incomplete files after a system crash.
+
 *-0*, *--fast*::
 Passes *-0* onto the *flac* command. This is the least attainable
 compression possible, and it is also the least CPU-intensive for both

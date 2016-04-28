@@ -114,6 +114,7 @@ while true ; do
             shift ;;
         -V|--version)
             echo "reflac version $VERSION"
+            rmdir "$TMPDIR"
             exit 0 ;;
         -h|--help)
             usage ;;

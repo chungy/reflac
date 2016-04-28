@@ -1,3 +1,7 @@
+1.2.1 (2016-04-28):
+
+  * Remove the temporary directory also after using --version
+
 1.2 (2016-04-28):
 
   * Sync data by default, add --no-sync switch to disable.  New

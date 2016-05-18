@@ -147,7 +147,7 @@ for dir do
         fi
     else
         pushd -- "$dir" >/dev/null
-        if [ $VERBOSE -gt 0 ]; then echo "$(readlink -f .)"; fi
+        if [ $VERBOSE -gt 0 ]; then readlink -f .; fi
         if [ ! -z "$(ls -- *.flac 2>/dev/null)" ]; then
             recompress
         fi

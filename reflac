@@ -11,7 +11,6 @@ SYNC=1
 FLAC_LEVEL=5 # Default FLAC compression level
 
 TMPDIR="$(mktemp --tmpdir -d reflac.XXXXXXXXXX)"
-CWD="$(pwd)"
 SELF="$(readlink -f "$0")"
 OPTS=$(getopt -o Vvhrns012345678 \
               -l version,verbose,help,recursive,no-action,no-sync,fast,best \
@@ -147,12 +146,12 @@ for dir do
                  -execdir "$SELF" -"$FLAC_LEVEL" {} \;
         fi
     else
-        cd -- "$dir"
+        pushd -- "$dir" >/dev/null
         if [ $VERBOSE -gt 0 ]; then echo "$(readlink -f .)"; fi
         if [ ! -z "$(ls -- *.flac 2>/dev/null)" ]; then
             recompress
         fi
-        cd "$CWD"
+        popd >/dev/null
     fi
 done
 

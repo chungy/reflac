@@ -75,7 +75,7 @@ Usage: reflac [OPTION]... [--] DIRECTORY...
 
 DIRECTORY should point ‘reflac’ to somewhere that contains *.flac
 files. Optionally terminate the argument list with -- so that any
-possible directory names don't get misinterpreted as arguments.
+possible directory names don’t get misinterpreted as arguments.
 ....
 
 Bugs

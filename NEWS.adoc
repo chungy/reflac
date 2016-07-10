@@ -1,3 +1,8 @@
+1.2.3 (2016-07-10)
+------------------
+
+  * Actually bump the script’s own version identifier.
+
 1.2.2 (2016-07-10)
 ------------------
 

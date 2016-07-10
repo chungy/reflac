@@ -10,11 +10,11 @@ NOACTION=0
 SYNC=1
 FLAC_LEVEL=5 # Default FLAC compression level
 
-TMPDIR="$(mktemp --tmpdir -d reflac.XXXXXXXXXX)"
 SELF="$(readlink -f "$0")"
 OPTS=$(getopt -o Vvhrns012345678 \
               -l version,verbose,help,recursive,no-action,no-sync,fast,best \
               -n reflac -- "$@")
+TMPDIR="$(mktemp --tmpdir -d reflac.XXXXXXXXXX)"
 
 eval set -- "$OPTS"
 

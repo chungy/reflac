@@ -63,13 +63,13 @@ recompress()
                      -- "$flac"
 
             if [ $VERBOSE -gt 1 ]; then
-                flac --output-prefix="$TMPDIR/" -d -- "$flac"
+                flac --force-rf64-format --output-prefix="$TMPDIR/" -d -- "$flac"
                 flac --delete-input-file -$FLAC_LEVEL -- \
-                     "$TMPDIR/$(basename -s flac -- "$flac")wav"
+                     "$TMPDIR/$(basename -s flac -- "$flac")rf64"
             else
-                flac -s --output-prefix="$TMPDIR/" -d -- "$flac"
+                flac -s --force-rf64-format --output-prefix="$TMPDIR/" -d -- "$flac"
                 flac -s --delete-input-file -$FLAC_LEVEL -- \
-                     "$TMPDIR/$(basename -s flac -- "$flac")wav"
+                     "$TMPDIR/$(basename -s flac -- "$flac")rf64"
             fi
 
             metaflac --no-utf8-convert \

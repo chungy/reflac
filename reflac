@@ -9,10 +9,11 @@ RECURSIVE=0
 NOACTION=0
 SYNC=1
 FLAC_LEVEL=5 # Default FLAC compression level
+PRESERVE_MODTIME="" # for -p|--preserve
 
 SELF="$(readlink -f "$0")"
-OPTS=$(getopt -o Vvhrns012345678 \
-              -l version,verbose,help,recursive,no-action,no-sync,fast,best \
+OPTS=$(getopt -o Vvhrnps012345678 \
+              -l version,verbose,help,recursive,preserve,no-action,no-sync,fast,best \
               -n reflac -- "$@")
 TMPDIR="$(mktemp --tmpdir -d reflac.XXXXXXXXXX)"
 
@@ -35,6 +36,7 @@ Usage: reflac [OPTION]... [--] DIRECTORY...
  -r --recursive  Recurse into directories.
  -n --no-action  Do not recompress.  With --verbose, displays a list of
                  files that would be processed.
+ -p --preserve   Preserve file modification time.
  -s --no-sync    Do not synchronize file data.  Will return faster, with
                  the potential danger to lose your files in a system crash.
  -0 --fast       Use the fastest, but worst, compression possible.
@@ -72,7 +74,7 @@ recompress()
                      "$TMPDIR/$(basename -s flac -- "$flac")rf64"
             fi
 
-            metaflac --no-utf8-convert \
+            metaflac --no-utf8-convert $PRESERVE_MODTIME \
                      --import-tags-from="$TMPDIR/$(basename -s flac -- "$flac")tag" \
                      -- "$TMPDIR/$flac"
             mv -f -- "$TMPDIR/$flac" "$flac.new"
@@ -108,6 +110,9 @@ while true ; do
         -n|--no-action)
             NOACTION=1
             shift ;;
+	-p|--preserve)
+	    PRESERVE_MODTIME="--preserve-modtime"
+	    shift ;;
         -s|--no-sync)
             SYNC=0
             shift ;;

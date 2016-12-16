@@ -66,6 +66,7 @@ Usage: reflac [OPTION]... [--] DIRECTORY...
  -r --recursive  Recurse into directories.
  -n --no-action  Do not recompress.  With --verbose, displays a list of
                  files that would be processed.
+ -p --preserve   Preserve file modification time.
  -s --no-sync    Do not synchronize file data.  Will return faster, with
                  the potential danger to lose your files in a system crash.
  -0 --fast       Use the fastest, but worst, compression possible.

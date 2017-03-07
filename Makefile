@@ -16,10 +16,8 @@ reflac.1: reflac.adoc
 	a2x -f manpage reflac.adoc
 
 install: reflac.1
-	install -d "$(target)/bin"
-	install -m 755 reflac "$(target)/bin"
-	install -d "$(target)$(mandir)/man1"
-	install -m 644 reflac.1 "$(target)$(mandir)/man1"
+	install -Dm 755 reflac "$(target)/bin/reflac"
+	install -Dm 644 reflac.1 "$(target)$(mandir)/man1/reflac.1"
 
 clean:
 	rm -f reflac.1

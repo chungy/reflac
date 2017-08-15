@@ -60,10 +60,12 @@ recompress()
         fi
 
         if [ $NOACTION -eq 0 ]; then
+            HAS_COVER_ART=1
             metaflac --no-utf8-convert \
                      --export-tags-to="$TMPDIR/$(basename -s flac -- "$flac")tag" \
                      -- "$flac"
-
+            metaflac --export-picture-to="$TMPDIR/$(basename -s flac -- "$flac")img" \
+                     -- "$flac" > /dev/null 2>&1 || HAS_COVER_ART=0 #the error is handled later. do not exit the script
             if [ $VERBOSE -gt 1 ]; then
                 flac --force-rf64-format --output-prefix="$TMPDIR/" -d -- "$flac"
                 flac --delete-input-file -$FLAC_LEVEL -- \
@@ -74,9 +76,16 @@ recompress()
                      "$TMPDIR/$(basename -s flac -- "$flac")rf64"
             fi
 
-            metaflac --no-utf8-convert $PRESERVE_MODTIME \
-                     --import-tags-from="$TMPDIR/$(basename -s flac -- "$flac")tag" \
-                     -- "$TMPDIR/$flac"
+            if [ $HAS_COVER_ART -eq 1 ]; then
+                metaflac --no-utf8-convert $PRESERVE_MODTIME \
+                        --import-tags-from="$TMPDIR/$(basename -s flac -- "$flac")tag" \
+                        --import-picture-from="$TMPDIR/$(basename -s flac -- "$flac")img" \
+                        -- "$TMPDIR/$flac"
+            else
+                metaflac --no-utf8-convert $PRESERVE_MODTIME \
+                        --import-tags-from="$TMPDIR/$(basename -s flac -- "$flac")tag" \
+                        -- "$TMPDIR/$flac"
+            fi
             mv -f -- "$TMPDIR/$flac" "$flac.new"
             if [ $SYNC -eq 1 ]; then
                 sync "$flac.new"
@@ -86,6 +95,9 @@ recompress()
                 mv -f "$flac.new" "$flac"
             fi
             rm -f -- "$TMPDIR/$(basename -s flac -- "$flac")tag"
+            if [ $HAS_COVER_ART -eq 1 ]; then
+                rm -f -- "$TMPDIR/$(basename -s flac -- "$flac")img"
+            fi
         fi
     done
 }

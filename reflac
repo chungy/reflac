@@ -94,10 +94,8 @@ recompress()
             else
                 mv -f "$flac.new" "$flac"
             fi
-            rm -f -- "$TMPDIR/$(basename -s flac -- "$flac")tag"
-            if [ $HAS_COVER_ART -eq 1 ]; then
-                rm -f -- "$TMPDIR/$(basename -s flac -- "$flac")img"
-            fi
+            rm -f -- "$TMPDIR/$(basename -s flac -- "$flac")tag" \
+                     "$TMPDIR/$(basename -s flac -- "$flac")img"
         fi
     done
 }

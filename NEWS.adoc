@@ -6,7 +6,7 @@
     common case.
 
 
-1.4 (2016-09-16)
+1.4 (2016-12-16)
 ----------------
 
   * Add an option to preserve the file modification time.

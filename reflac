@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-VERSION=1.4
+VERSION=1.5
 
 VERBOSE=0
 RECURSIVE=0

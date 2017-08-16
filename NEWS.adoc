@@ -1,3 +1,11 @@
+1.5 (2017-08-16)
+----------------
+
+  * reflac has learned to preserve an embedded image in FLAC files.
+    Limited to just one image for now, but should cover the most
+    common case.
+
+
 1.4 (2016-09-16)
 ----------------
 

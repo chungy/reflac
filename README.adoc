@@ -1,5 +1,4 @@
-reflac
-======
+= reflac
 
 This is a script that allows you to recompress FLAC files while
 preserving their tags, intended for whole directories and for safety
@@ -19,8 +18,7 @@ black/white display iPod, and found that `flac -3` was the maximum he
 could compress FLACs while maintaining uninterrupted playback on the
 device.
 
-Requirements
-------------
+== Requirements
 
 Both `flac` and `metaflac` need to be in your $PATH.  These programs
 are normally packaged together as “flac” by distributions.
@@ -33,8 +31,7 @@ compatibility with the same switches found in the GNU versions.
 reflac has only been developed on tested on GNU+Linux, but should work
 on any other operating system with the appropriate tools.
 
-Safety
-------
+== Safety
 
 By default, reflac performs a sync on files after two points of its
 process: after moving the recompressed file from the temporary
@@ -52,8 +49,7 @@ scenarios should arise in the worst case:
   processed, which may or may not be a complete FLAC file, the status
   of which can be tested with `flac -t`.
 
-Running
--------
+== Running
 
 ....
 Usage: reflac [OPTION]... [--] DIRECTORY...
@@ -79,8 +75,7 @@ files. Optionally terminate the argument list with -- so that any
 possible directory names don’t get misinterpreted as arguments.
 ....
 
-Bugs
-----
+== Bugs
 
 What, bugs?  This program is flawless!  Joking aside, although the
 author tries to resolve in reflac itself, it is at the mercy of bugs

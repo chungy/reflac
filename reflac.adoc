@@ -1,18 +1,14 @@
-reflac(1)
-=========
+= reflac(1)
 :doctype: manpage
 
 
-NAME
-----
+== NAME
 reflac - recompress FLAC files
 
-SYNOPSIS
---------
+== SYNOPSIS
 *reflac* ['OPTIONS'...] ['--'] 'DIRECTORY'...
 
-DESCRIPTION
------------
+== DESCRIPTION
 reflac recompresses FLAC files while preserving all of their tags, and
 one embedded image.  It should always be safe to run, it handles cases
 of special file names well, allowing odd characters such as *, ?, |,
@@ -69,7 +65,6 @@ encoding and decoding.  Real-time playback may not be possible on some
 embedded-type systems, such as Blu-ray players or portable music
 players.
 
-COPYRIGHT
----------
+== COPYRIGHT
 reflac is licensed under a very permissive ISC license, the same
 prefered by OpenBSD.  See *COPYING* in the distribution for details.

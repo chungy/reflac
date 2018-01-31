@@ -23,8 +23,8 @@
 
   * The first bash in the $PATH is used instead of /bin/bash
   * Shift temporary directory creation after getopt.  reflac won’t
-    leave one around anymore after ambiguous options (such as “--v”
-    expanding to both “--verbose” and “--version”).
+    leave one around anymore after ambiguous options (such as `--v`
+    expanding to both `--verbose` and `--version`).
 
 == 1.2.1 (2016-04-28)
 

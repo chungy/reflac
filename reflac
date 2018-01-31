@@ -146,19 +146,28 @@ if [ $VERBOSE -eq 0 ] && [ $NOACTION -eq 1 ]; then
     exit 0
 fi
 
-for dir do
+for dir; do
+    REFLAC_OPTS="${FLAC_LEVEL}"
+
+    if [ $SYNC -eq 0 ]; then
+        REFLAC_OPTS="${REFLAC_OPTS}s"
+    fi
+    if [ -n "$PRESERVE_MODTIME" ]; then
+        REFLAC_OPTS="${REFLAC_OPTS}p"
+    fi
+
     if [ $RECURSIVE -eq 1 ] && [ $NOACTION -eq 1 ]; then
         find "$(readlink -f -- "$dir")" -type d -execdir "$SELF" -nv {} \;
     elif [ $RECURSIVE -eq 1 ]; then
         if [ $VERBOSE -eq 1 ]; then
             find "$(readlink -f -- "$dir")" -type d \
-                 -execdir "$SELF" -v -"$FLAC_LEVEL" {} \;
+                 -execdir "$SELF" -v"$REFLAC_OPTS" {} \;
         elif [ $VERBOSE -ge 2 ]; then
             find "$(readlink -f -- "$dir")" -type d \
-                 -execdir "$SELF" -vv -"$FLAC_LEVEL" {} \;
+                 -execdir "$SELF" -vv"$REFLAC_OPTS" {} \;
         else
             find "$(readlink -f -- "$dir")" -type d \
-                 -execdir "$SELF" -"$FLAC_LEVEL" {} \;
+                 -execdir "$SELF" "$REFLAC_OPTS" {} \;
         fi
     else
         pushd -- "$dir" >/dev/null

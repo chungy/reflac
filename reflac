@@ -120,9 +120,9 @@ while true ; do
         -n|--no-action)
             NOACTION=1
             shift ;;
-	-p|--preserve)
-	    PRESERVE_MODTIME="--preserve-modtime"
-	    shift ;;
+        -p|--preserve)
+            PRESERVE_MODTIME="--preserve-modtime"
+            shift ;;
         -s|--no-sync)
             SYNC=0
             shift ;;

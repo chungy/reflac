@@ -167,7 +167,7 @@ for dir; do
                  -execdir "$SELF" -vv"$REFLAC_OPTS" {} \;
         else
             find "$(readlink -f -- "$dir")" -type d \
-                 -execdir "$SELF" "$REFLAC_OPTS" {} \;
+                 -execdir "$SELF" -"$REFLAC_OPTS" {} \;
         fi
     else
         pushd -- "$dir" >/dev/null

@@ -1,5 +1,8 @@
 = reflac project news
 
+1.5.2 (2019-01-26)::
+  * The non-verbose recursive use case of reflac has been repaired.
+
 1.5.1 (2018-01-31)::
   * reflac now passes on the `--no-sync` and `--preserve` options to
     child processes when `--recursive` is used.

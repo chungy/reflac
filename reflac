@@ -12,8 +12,8 @@ FLAC_LEVEL=5 # Default FLAC compression level
 PRESERVE_MODTIME="" # for -p|--preserve
 
 SELF="$(readlink -f "$0")"
-OPTS=$(getopt -o Vvhrnps012345678 \
-              -l version,verbose,help,recursive,preserve,no-action,no-sync,fast,best \
+OPTS=$(getopt -o 012345678hnprsvV \
+              -l best,fast,help,no-action,no-sync,preserve,recursive,verbose,version \
               -n reflac -- "$@")
 TMPDIR="$(mktemp --tmpdir -d reflac.XXXXXXXXXX)"
 
@@ -29,20 +29,20 @@ usage()
 Usage: reflac [OPTION]... [--] DIRECTORY...
 
  -h --help       Displays this help text
- -V --version    Displays the version of this program
- -v --verbose    Increases the verbosity.  Use once to display the FLACs
-                 currently being processed, use twice for the full ‘flac’
-                 output.
- -r --recursive  Recurse into directories.
- -n --no-action  Do not recompress.  With --verbose, displays a list of
-                 files that would be processed.
- -p --preserve   Preserve file modification time.
- -s --no-sync    Do not synchronize file data.  Will return faster, with
-                 the potential danger to lose your files in a system crash.
  -0 --fast       Use the fastest, but worst, compression possible.
  -1..-7          Adjust FLAC compresion between these standard ranges.
                  The default is -5, the same as for flac itself.
  -8 --best       Use the slowest, but best, compression possible.
+ -n --no-action  Do not recompress.  With --verbose, displays a list of
+                 files that would be processed.
+ -p --preserve   Preserve file modification time.
+ -r --recursive  Recurse into directories.
+ -s --no-sync    Do not synchronize file data.  Will return faster, with
+                 the potential danger to lose your files in a system crash.
+ -v --verbose    Increases the verbosity.  Use once to display the FLACs
+                 currently being processed, use twice for the full ‘flac’
+                 output.
+ -V --version    Displays the version of this program
 
 DIRECTORY should point ‘reflac’ to somewhere that contains *.flac
 files. Optionally terminate the argument list with -- so that any
@@ -102,12 +102,6 @@ recompress()
 
 while true ; do
     case "$1" in
-        -v|--verbose)
-            VERBOSE=$((VERBOSE+1))
-            shift ;;
-        -r|--recursive)
-            RECURSIVE=1
-            shift ;;
         -0|-1|-2|-3|-4|-5|-6|-7|-8)
             FLAC_LEVEL=${1#-}
             shift ;;
@@ -117,21 +111,27 @@ while true ; do
         --best)
             FLAC_LEVEL=8
             shift ;;
+        -h|--help)
+            usage ;;
         -n|--no-action)
             NOACTION=1
             shift ;;
         -p|--preserve)
             PRESERVE_MODTIME="--preserve-modtime"
             shift ;;
+        -r|--recursive)
+            RECURSIVE=1
+            shift ;;
         -s|--no-sync)
             SYNC=0
+            shift ;;
+        -v|--verbose)
+            VERBOSE=$((VERBOSE+1))
             shift ;;
         -V|--version)
             echo "reflac version $VERSION"
             rmdir "$TMPDIR"
             exit 0 ;;
-        -h|--help)
-            usage ;;
         --) shift; break ;;
         *) echo "$0: This should never happen!" >&2; exit 1 ;;
     esac

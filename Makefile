@@ -1,6 +1,7 @@
 # Makefile for reflac
 
-# asciidoc is required to generate the manpage.
+# This can be changed to "asciidoctor -b manpage" if necessary.
+ASCIIDOC?=a2x -f manpage
 
 # Autotools-like prefix, mandir, and DESTDIR variables can be
 # overriden to control where files are installed.
@@ -13,7 +14,7 @@ all: man
 man: reflac.1
 
 reflac.1: reflac.adoc
-	a2x -f manpage reflac.adoc
+	$(ASCIIDOC) reflac.adoc
 
 install: reflac.1
 	install -Dm 755 reflac "$(target)/bin/reflac"

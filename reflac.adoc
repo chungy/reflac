@@ -6,21 +6,21 @@
 reflac - recompress FLAC files
 
 == SYNOPSIS
-*reflac* ['OPTIONS'...] ['--'] 'DIRECTORY'...
+*reflac* [_OPTIONS_...] [_--_] _DIRECTORY_...
 
 == DESCRIPTION
 reflac recompresses FLAC files while preserving all of their tags, and
 one embedded image.  It should always be safe to run, it handles cases
 of special file names well, allowing odd characters such as *, ?, |,
 and so on.  To use on a directory that itself begins with a hyphen,
-you should use the '--' argument, it will terminate the options list
+you should use the _--_ argument, it will terminate the options list
 and intepret all further arguments as directory names.
 
 *-h*, *--help*::
 Displays a usage summary and brief help descriptions.
 
 *-V*, *--version*::
-Displays reflac's version.
+Displays reflac’s version.
 
 *-v*, *--verbose*::
 reflac will keep quiet in normal operation, keeping to the Rule of

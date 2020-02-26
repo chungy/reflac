@@ -30,7 +30,7 @@ Usage: reflac [OPTION]... [--] DIRECTORY...
 
  -h --help       Displays this help text
  -0 --fast       Use the fastest, but worst, compression possible.
- -1..-7          Adjust FLAC compresion between these standard ranges.
+ -1..-7          Adjust FLAC compression between these standard ranges.
                  The default is -5, the same as for flac itself.
  -8 --best       Use the slowest, but best, compression possible.
  -n --no-action  Do not recompress.  With --verbose, displays a list of

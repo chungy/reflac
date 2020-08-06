@@ -21,6 +21,12 @@ eval set -- "$OPTS"
 
 trap "exit 1" INT
 
+cleanup()
+{
+    rmdir "$TMPDIR"
+    exit "$1"
+}
+
 usage()
 {
     cat <<EOF
@@ -48,8 +54,7 @@ DIRECTORY should point ‘reflac’ to somewhere that contains *.flac
 files. Optionally terminate the argument list with -- so that any
 possible directory names don’t get misinterpreted as arguments.
 EOF
-    rmdir "$TMPDIR"
-    exit 0
+    cleanup 0
 }
 
 recompress()
@@ -130,10 +135,9 @@ while true ; do
             shift ;;
         -V|--version)
             echo "reflac version $VERSION"
-            rmdir "$TMPDIR"
-            exit 0 ;;
+            cleanup 0 ;;
         --) shift; break ;;
-        *) echo "$0: This should never happen!" >&2; exit 1 ;;
+        *) echo "$0: This should never happen!" >&2; cleanup 1 ;;
     esac
 done
 
@@ -142,8 +146,7 @@ if [ -z "$*" ]; then
 fi
 
 if [ $VERBOSE -eq 0 ] && [ $NOACTION -eq 1 ]; then
-    rmdir "$TMPDIR"
-    exit 0
+    cleanup 0
 fi
 
 for dir; do
@@ -170,7 +173,7 @@ for dir; do
                  -execdir "$SELF" -"$REFLAC_OPTS" {} \;
         fi
     else
-        pushd -- "$dir" >/dev/null
+        pushd -- "$dir" >/dev/null || cleanup $?
         if [ $VERBOSE -gt 0 ]; then readlink -f .; fi
         if [ ! -z "$(ls -- *.flac 2>/dev/null)" ]; then
             recompress

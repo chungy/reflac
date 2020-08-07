@@ -1,5 +1,13 @@
 = reflac project news
 
+2.0.0 (2020-08-07)::
+  * reflac skips intermediate decompression steps, significantly
+    speeding up the program and simplifying the code.
+  * Removed the `--preserve` option as `flac` itself now handles it
+    without special conditioning.  This is a *breaking* change, and by
+    https://semver.org/[Semantic Versioning] rules, necessitates a
+    major version bump, thus: reflac 2.0.0.
+
 1.5.3 (2020-02-26)::
   * AsciiDoc implementation can be altered for manpage generation with
     `make ASCIIDOC="command..."`, defaulting to `a2x` as before.  Some

@@ -20,8 +20,8 @@ device.
 
 == Requirements
 
-Both `flac` and `metaflac` need to be in your $PATH.  These programs
-are normally packaged together as “flac” by distributions.
+`flac` needs to be in your $PATH.  This program is normally packaged
+as “flac” by distributions.
 
 The script both depends on Bash and GNU features of other core
 utilities.  Versions of `mv`, `getopt`, `sync`, etc from other sources
@@ -61,7 +61,6 @@ Usage: reflac [OPTION]... [--] DIRECTORY...
  -8 --best       Use the slowest, but best, compression possible.
  -n --no-action  Do not recompress.  With --verbose, displays a list of
                  files that would be processed.
- -p --preserve   Preserve file modification time.
  -r --recursive  Recurse into directories.
  -s --no-sync    Do not synchronize file data.  Will return faster, with
                  the potential danger to lose your files in a system crash.
@@ -99,7 +98,7 @@ example.  The original file will not have been overwritten,
 maintaining the existing compression as well as the existing tags.
 
 The choice is left to the user for repairing the file manually, such
-as by editing the tag file and using `metaflac` yourself, or removing
-the temporary directory altogether.  The author uses, and recommends,
+as by using `metaflac`, or removing the temporary directory
+altogether.  The author uses, and recommends,
 https://picard.musicbrainz.org/[MusicBrainz Picard] to retag files
 before using `reflac`.

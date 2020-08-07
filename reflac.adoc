@@ -36,9 +36,6 @@ store multiple albums or multiple discs in separate directories, you
 can just specify the top-level directory with the recursive option
 enabled.
 
-*-p*, *--preserve*::
-Preserves file modification time stamps, where possible.
-
 *-n*, *--no-action*::
 Do not recompress any files.  Combined with the *-v* option, reflac
 will display a list of files it would otherwise recompress.

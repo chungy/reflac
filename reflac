@@ -9,11 +9,10 @@ RECURSIVE=0
 NOACTION=0
 SYNC=1
 FLAC_LEVEL=5 # Default FLAC compression level
-PRESERVE_MODTIME="" # for -p|--preserve
 
 SELF="$(readlink -f "$0")"
-OPTS=$(getopt -o 012345678hnprsvV \
-              -l best,fast,help,no-action,no-sync,preserve,recursive,verbose,version \
+OPTS=$(getopt -o 012345678hnrsvV \
+              -l best,fast,help,no-action,no-sync,recursive,verbose,version \
               -n reflac -- "$@")
 TMPDIR="$(mktemp --tmpdir -d reflac.XXXXXXXXXX)"
 
@@ -41,7 +40,6 @@ Usage: reflac [OPTION]... [--] DIRECTORY...
  -8 --best       Use the slowest, but best, compression possible.
  -n --no-action  Do not recompress.  With --verbose, displays a list of
                  files that would be processed.
- -p --preserve   Preserve file modification time.
  -r --recursive  Recurse into directories.
  -s --no-sync    Do not synchronize file data.  Will return faster, with
                  the potential danger to lose your files in a system crash.
@@ -105,9 +103,6 @@ while true ; do
         -n|--no-action)
             NOACTION=1
             shift ;;
-        -p|--preserve)
-            PRESERVE_MODTIME="--preserve-modtime"
-            shift ;;
         -r|--recursive)
             RECURSIVE=1
             shift ;;
@@ -138,9 +133,6 @@ for dir; do
 
     if [ $SYNC -eq 0 ]; then
         REFLAC_OPTS="${REFLAC_OPTS}s"
-    fi
-    if [ -n "$PRESERVE_MODTIME" ]; then
-        REFLAC_OPTS="${REFLAC_OPTS}p"
     fi
 
     if [ $RECURSIVE -eq 1 ] && [ $NOACTION -eq 1 ]; then

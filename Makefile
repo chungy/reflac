@@ -1,5 +1,3 @@
-# Makefile for reflac
-
 # This can be changed to "asciidoctor -b manpage" if necessary.
 ASCIIDOC?=a2x -f manpage
 
@@ -17,7 +15,7 @@ reflac.1: reflac.adoc
 	$(ASCIIDOC) reflac.adoc
 
 clean:
-	rm -f reflac.1
+	$(RM) reflac.1
 
 install: reflac.1
 	install -Dm 755 reflac "$(target)/bin/reflac"

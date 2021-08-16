@@ -1,5 +1,9 @@
 = reflac project news
 
+2.0.1 (2021-08-16)::
+  * Solve a minor edge-case: reflac will now find and recompress
+    hidden files.
+
 2.0.0 (2020-08-07)::
   * reflac skips intermediate decompression steps, significantly
     speeding up the program and simplifying the code.

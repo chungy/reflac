@@ -151,7 +151,7 @@ for dir; do
     else
         pushd -- "$dir" >/dev/null || cleanup $?
         if [ $VERBOSE -gt 0 ]; then readlink -f .; fi
-        if [ ! -z "$(ls -- *.flac 2>/dev/null)" ]; then
+        if [ -n "$(ls -- *.flac 2>/dev/null)" ]; then
             recompress
         fi
         popd >/dev/null

@@ -1,5 +1,9 @@
 = reflac project news
 
+HEAD::
+  * `Makefile` now has an `uninstall` rule, for those that aren’t
+    using a package manager to install this.
+
 2.0.1 (2021-08-16)::
   * Solve a minor edge-case: reflac will now find and recompress
     hidden files.
